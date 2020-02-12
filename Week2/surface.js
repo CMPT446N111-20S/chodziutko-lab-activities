@@ -1,9 +1,10 @@
 import * as Vec from "./vecmath.js";
 
 /* Hit record structure */
-function Hit(obj, t) {
+function Hit(obj, t, p) {
   this.object = obj;
   this.t = t;
+ this.p = p;
 }
 
 /* Representation of a group of surfaces */
@@ -42,17 +43,29 @@ export function Sphere(center, radius, color) {
   this.color  = color;
 }
 
+
+
+Sphere.prototype.normal = function(p){
+    
+    return Vec.norm(Vec.diff(p, this.center)); // (p-c)/r formula
+    
+    
+}
+
 Sphere.prototype.intersect = function({origin, direction}) {
   // TODO Compute the quadratic coefficients A, B, and C
   const A  = Vec.dot(direction, direction); //A = d . d
   const ec = Vec.diff(origin, this.center);
   const B  = Vec.dot(Vec.mult(2, direction), ec); //B = 2d . (e-c)
   const C  = Vec.dot(ec, ec) - Math.pow(this.radius, 2);
+ 
   // TODO Compute the discriminant
   const discriminant = Math.pow(B, 2) - (4 * A * C);
   // TODO Check whether intersection exists and return an appropriate Hit object
   if (discriminant >= 0) {
       console.log("HIT");
-    return new Hit(this, (-B - Math.sqrt(discriminant)) / A);
+      const t = (-B - Math.sqrt(discriminant)) / A
+      const p = Vec.add(origin, Vec.mult(t, direction)); // this is the e + td formula
+    return new Hit(this, t, p);
   }
 };
