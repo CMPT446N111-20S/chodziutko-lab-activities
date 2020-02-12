@@ -30,6 +30,10 @@ export function Scene(surface) {
     //whats normalization
     //I ranges between 0-1
     //do the entire thing three time
+    this.light = {
+    p: [0,1,0],
+    i: 0.75
+    }
    
 }
 
@@ -63,12 +67,25 @@ Scene.prototype.shade = function(hit, ray) {
   //  Otherwise return the background color.
     // diffuse shading: color = k(d) (object.color) * I(intensity of light) * max(0,n.l)
     
-    let l = [0,1,0];
+    //let l = [0,1,0];
+    
+   
+    //const h =
     if (hit){
+        var l = Vec.norm(Vec.diff(this.light.p, hit.p));
+        const v = Vec.norm(Vec.diff(this.camera.e, hit.p));
+        const h = (Vec.norm(Vec.add(v,l)));
         // TODO compute normal vector n
+        
         const n = hit.object.normal(hit.p);
+        const a = Vec.mult(1, hit.object.color);
+        const b = Math.max(0, Vec.dot(n, h));
+        const phong = Vec.mult(Math.pow(b, hit.object.shine),a);
+        const diffuse = (Vec.mult((Math.max(0, Vec.dot(n, l))),Vec.mult(1, hit.object.color)));
         //wha t if i just dropped out
-        return (Vec.mult(.5, hit.object.color)) * Math.max(0, Vec.dot(n, l));
+        return (Vec.add(phong, diffuse));
+        
+        
         //
         //return hit.object.color;
     } else {

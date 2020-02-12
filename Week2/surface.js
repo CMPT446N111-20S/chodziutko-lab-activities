@@ -41,6 +41,7 @@ export function Sphere(center, radius, color) {
   this.center = center;
   this.radius = radius;
   this.color  = color;
+    this.shine = 1000;
 }
 
 
@@ -64,7 +65,7 @@ Sphere.prototype.intersect = function({origin, direction}) {
   // TODO Check whether intersection exists and return an appropriate Hit object
   if (discriminant >= 0) {
       console.log("HIT");
-      const t = (-B - Math.sqrt(discriminant)) / A
+      const t = (-B - Math.sqrt(discriminant)) / (2 * A)
       const p = Vec.add(origin, Vec.mult(t, direction)); // this is the e + td formula
     return new Hit(this, t, p);
   }
