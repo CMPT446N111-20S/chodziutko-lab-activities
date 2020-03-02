@@ -46,7 +46,7 @@ Scene.prototype.project = function(i, j) {
   const bottom = -top; // -(Math.tan(this.camera.fov/2))
   const left = -right; // -(top * aspect)
   const u = left + (right - left) * (i + 0.5)/ this.image.width;
-  const v = bottom + (top - bottom) * (j + 0.5)/this.image.height;
+  const v = top - (top - bottom) * (j + 0.5)/this.image.height;
 
   return {
     // TODO use u and v to compute the ray direction
