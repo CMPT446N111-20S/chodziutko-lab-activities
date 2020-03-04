@@ -204,7 +204,7 @@
           {
             x = x + dx; 
             y = y + m; 
-            this.drawPixel(color, new Coords(x, y)); // draw this pixel
+            this.drawPixel(color, new Coords(x, Math.round(y))); // draw this pixel
           }
         }
         else 
@@ -225,7 +225,7 @@
           {
             y = y + dy; 
             x = x + m; 
-            this.drawPixel(color, new Coords(x, y)); // draw this pixel
+            this.drawPixel(color, new Coords(Math.round(x), y)); // draw this pixel
           }
         }
 
