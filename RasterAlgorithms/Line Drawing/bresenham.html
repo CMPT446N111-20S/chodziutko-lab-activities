@@ -19,7 +19,7 @@
           view.htmlElementBuild()
         );
 
-        view.drawLine = view.drawLineDDA;
+        view.drawLine = view.drawLineBresenham;
 
         view.drawLine(
           Color.Instances.Red,
@@ -247,15 +247,24 @@
       
       
       /* Endpoints (X1,Y1) and (X2,Y2) are startPos and endPos, respectively. */
-      View.prototype.drawLineBresenham = function(color, startPos, endPos) {
+    View.prototype.drawLineBresenham = function(color, startPos, endPos) {
         /* Rasterize a line from startPos to endPos using the Bresenham's algorithm: */
-        var steep, tmp, dx, dy, x, y, step, e, de;
-        steep /* = ? */; /* TODO (check for steep slope case) */
+        var steep, tmp, tmp2, dx, dy, x, y, step, e, de;
+      
+       var steep = new Boolean(Math.abs(dy) > Math.abs(dx)); /* = ? */; /* TODO (check for steep slope case) */
 
         if (steep) {
           /* switch our notion of x and y for each endpoint */
-          ; /* TODO (first endpoint, may require more than one line) */ 
-          ; /* TODO (second endpoint, may require more than one line) */
+           tmp = startPos.y;
+          tmp2 = startPos.x;
+          startPos.x = tmp; /* TODO (first endpoint, may require more than one line) */ 
+          startPos.y = tmp2; /* TODO (second endpoint, may require more than one line) */
+          
+          tmp = endPos.y;
+          tmp2 = endPos.x;
+          endPos.x = tmp; /* TODO (first endpoint, may require more than one line) */ 
+          endPos.y = tmp2;
+          
         }
 
         if (startPos.x > endPos.x) {
@@ -264,28 +273,36 @@
           startPos = endPos;
           endPos = tmp; /* reverse the endpoints */
         }
-
-        dx /* = ? */; /* TODO (computed as usual) */
-        dy /* = ? */; /* TODO (computed as an absolute value; ystep takes care of direction) */
-        e = 0; /* (no error, initially) */
+ /* TODO (computed as an absolute value; ystep takes care of direction) */
+         var dx = (endPos.x - startPos.x);
+          var dy = Math.abs(endPos.y - startPos.y);
+          var e = 0;
+          var x = startPos.x
+          var ystep = 0;
         de = dy; /* (value to adjust error term by) */
         y = startPos.y; /* (start on first endpoint's scanline) */
 
-        if (0) /* TODO (first endpoint is "below" second endpoint) */
-          ystep /* = ? */ ; /* TODO (y increment will be positive) */
-        else
-          /* ? = ? */
-        ; /* TODO (y increment will be negative) */
+        if (y < endPos.y){ /* TODO (first endpoint is "below" second endpoint) */
+          ystep++;/* = ? */ ; /* TODO (y increment will be positive) */
+        } else{
+        ystep--; /* TODO (y increment will be negative) */
+        }
 
         /* TODO Loop from X1 to X2	('X' really is 'Y' if this is steep slope case) */
-        for (x /* = ? */ ; 0 /* test? */ ; ++x) {
-          ;
+        for (x = startPos.x ; x < endPos.x ; ++x) {
+          if (steep){
+            this.drawPixel(color, new Coords(Math.round(y), x));
+          } else {
+            this.drawPixel(color, new Coords(Math.round(x), y));
+          }
+            
+          
           /* TODO Draw the pixel (this will require multiple lines)
           				Remember: steep slope case swaps x and y!*/
-
-          ; /* TODO Add to the error term */
-          if (0) /* TODO See if y increments */ {
-            ; /* TODO Increment y */ ; /* TODO Reset error term */
+            e = e + de;
+           if ((e * 2) >= dx) {
+            y = y + ystep; /* TODO Increment y */ 
+              e = e - dx; /* TODO Reset error term */
           }
         }
       }
