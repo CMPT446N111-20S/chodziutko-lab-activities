@@ -251,7 +251,8 @@
         /* Rasterize a line from startPos to endPos using the Bresenham's algorithm: */
         var steep, tmp, tmp2, dx, dy, x, y, step, e, de;
       
-       var steep = new Boolean(Math.abs(dy) > Math.abs(dx)); /* = ? */; /* TODO (check for steep slope case) */
+        var steep = new Boolean(Math.abs(endPos.y - startPos.y) > Math.abs(endPos.x - startPos.x));
+       //var steep = new Boolean(Math.abs(dy) > Math.abs(dx)); /* = ? */; /* TODO (check for steep slope case) */
 
         if (steep) {
           /* switch our notion of x and y for each endpoint */
@@ -262,7 +263,7 @@
           
           tmp = endPos.y;
           tmp2 = endPos.x;
-          endPos.x = tmp; /* TODO (first endpoint, may require more than one line) */ 
+          endPos.x = tmp; 
           endPos.y = tmp2;
           
         }
