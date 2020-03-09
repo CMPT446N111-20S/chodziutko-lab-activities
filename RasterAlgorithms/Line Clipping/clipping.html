@@ -180,10 +180,10 @@
           } else if (codeOut & RIGHT) {
             y = y0 + delY * (xMax - x0) / delX; 
             x = xMax;
-          } else if (1 /* TODO replace with the real test expression */ ) {
+          } else if (codeOut & TOP) {
              x = x0 + delX * (yMax - y0) / delY; 
                 y = yMax; 
-          } else if (1 /* TODO replace with the real test expression */ ) {
+          } else if (codeOut & BOTTOM) {
              x = x0 + delX * (yMin - y0) / delY; 
                 y = yMin;
           }
@@ -195,6 +195,7 @@
             y0 = y;
             code0 = computeOutCode(x0, y0);
           } else {
+              clippedLines.push(new Point(x1, y1, 0), new Point(x, y, 0));
             x1 = x;
               y1 = y;
               code1 = computeOutCode(x1,y1);
