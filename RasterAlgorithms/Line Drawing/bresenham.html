@@ -182,7 +182,7 @@
         var x = 0; 
         var y = 0; // algorithm increments x or y, depending on slope
 
-          var steep = new Boolean(dy > dx);
+          var steep = dy > dx;
       
           this.drawPixel(color, startPos);
 
@@ -251,7 +251,7 @@
         /* Rasterize a line from startPos to endPos using the Bresenham's algorithm: */
         var steep, tmp, tmp2, dx, dy, x, y, step, e, de;
       
-        var steep = new Boolean(Math.abs(endPos.y - startPos.y) > Math.abs(endPos.x - startPos.x));
+        var steep = Math.abs(endPos.y - startPos.y) > Math.abs(endPos.x - startPos.x);
        //var steep = new Boolean(Math.abs(dy) > Math.abs(dx)); /* = ? */; /* TODO (check for steep slope case) */
 
         if (steep) {
