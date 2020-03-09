@@ -129,17 +129,16 @@
 
     function computeOutCode(x, y) {
       var code = INSIDE;
-  
 
       if (x < xMin) {
-        code |= LEFT; /* x can't be both < L and > R */
+        code |= LEFT; 
       } else if(x > xMax) {
         code |= RIGHT;
         ; /* RIGHT */
       }
 
       if (y < yMin) {
-        code |= BOTTOM; /* y can't be both < B and > T */
+        code |= BOTTOM; 
       } else if (y > yMax) {
         code |= TOP; /* TOP */
       }
