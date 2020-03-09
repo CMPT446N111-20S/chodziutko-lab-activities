@@ -142,14 +142,14 @@
 
       if (x < xMin) {
         code |= LEFT; /* x can't be both < L and > R */
-      } else {
+      } else if(x > xMax) {
         code |= RIGHT;
         ; /* RIGHT */
       }
 
       if (y < yMin) {
         code |= BOTTOM; /* y can't be both < B and > T */
-      } else /* TODO */ {
+      } else if (y > yMax) {
         code |= TOP; /* TOP */
       }
 
