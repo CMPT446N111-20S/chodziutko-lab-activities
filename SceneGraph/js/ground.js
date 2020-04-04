@@ -25,6 +25,6 @@ export default function Ground(x, y, z) {
 Ground.prototype = Object.create(THREE.Mesh.prototype);
  console.log("2")
 //Ground.prototype.geometry = new THREE.PlaneGeometry(10000, 0.1, 10000, 1, 1, 1);
-Ground.prototype.geometry = new THREE.PlaneGeometry(500, 200, 1);
+Ground.prototype.geometry = new THREE.PlaneGeometry(100, 50);
  console.log("3")
 // TODO #1 all Ground objects should have a Plane geometry

@@ -42,6 +42,7 @@
     import * as THREE from './js/vendor/build/three.module.js';
     // TODO #1 import your Ground class
     import GROUND from './js/ground.js';
+    import UNI from './js/model.js';
     // TODO #4a import your hierarchical model class
 
     var container;
@@ -101,7 +102,8 @@
 
       scene.add(new GROUND(0, 0));
         
-
+        
+      scene.add(new UNI(manager));
       // TODO #5 instantiate your hierarchical model and add it to your scene
     }
 
