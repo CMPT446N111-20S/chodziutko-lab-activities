@@ -13,7 +13,7 @@ export default function Ground(x, y, z) {
      new THREE.TextureLoader().load('./textures/rough_asphalt_tile.jpg', texture => {
     self.texture = texture;
     texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-    texture.repeat.set(100, 50);
+    texture.repeat.set(50, 50);
     texture.minFilter = THREE.LinearFilter;
     texture.magFilter = THREE.LinearFilter;
     self.material = new THREE.MeshLambertMaterial({
@@ -24,6 +24,7 @@ export default function Ground(x, y, z) {
 
 Ground.prototype = Object.create(THREE.Mesh.prototype);
  console.log("2")
-Ground.prototype.geometry = new THREE.PlaneGeometry(10000, 0.1, 10000, 1, 1, 1);
+//Ground.prototype.geometry = new THREE.PlaneGeometry(10000, 0.1, 10000, 1, 1, 1);
+Ground.prototype.geometry = new THREE.PlaneGeometry(500, 200, 1);
  console.log("3")
 // TODO #1 all Ground objects should have a Plane geometry
