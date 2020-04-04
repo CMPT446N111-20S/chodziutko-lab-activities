@@ -41,6 +41,7 @@
   <script type="module">
     import * as THREE from './js/vendor/build/three.module.js';
     // TODO #1 import your Ground class
+    import GROUND from './js/ground.js';
     // TODO #4a import your hierarchical model class
 
     var container;
@@ -86,10 +87,20 @@
 
     function setupLighting(scene) {
       // TODO #2 create and add lights to your scene
+         const directionalLight = new THREE.DirectionalLight(0xffeedd);
+      directionalLight.position.set(400, 200, 1000).normalize();
+      scene.add(directionalLight);  
+
+      scene.add(new THREE.AmbientLight(0x101010));
+      scene.background = new THREE.Color( 0x88aadd );
     }
 
     function setupObjects(scene) {
       // TODO #3 instantiate some Ground and add it to your scene
+         const manager = new THREE.LoadingManager();
+
+      scene.add(new GROUND(0, 0));
+        
 
       // TODO #5 instantiate your hierarchical model and add it to your scene
     }
