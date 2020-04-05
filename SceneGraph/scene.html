@@ -64,7 +64,7 @@
       document.body.appendChild(container);
 
       // TODO #7 (optional) customize your camera
-      camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 2000);
+      camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 1, 2000);
       camera.position.z = 100;
 
       // scene
@@ -110,7 +110,7 @@
     function animate() {
       requestAnimationFrame(animate);
       try {
-        // TODO #6 call the animate() method of your hierarchical model
+        UNI.animate();
       } catch (e) {}
       render();
     }
@@ -135,6 +135,10 @@
 
     function onKeyDown(event) {
       switch (event.keyCode) {
+          case 74:
+              animate();
+          //UNI.turnRight();
+          break;
         // TODO #9 (optional) interact with your model using keyboard controls
         default:
           return;

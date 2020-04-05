@@ -21,8 +21,8 @@ export default function MyModel(manager) {
   // TODO #2a create a base mesh from a simple geometry
     
     //UNICYCLE
-    var geometry = new THREE.CircleGeometry( 5, 15 );
-    var material = new THREE.MeshBasicMaterial( { color: 0xffff00 } );
+    var geometry = new THREE.CircleGeometry( 5,8 );
+    var material = new THREE.MeshBasicMaterial( { color: 0x5e3191 } );
     var circle = new THREE.Mesh( geometry, material );
     //self.
     circle.position.x = 0.25;
@@ -30,16 +30,16 @@ export default function MyModel(manager) {
     circle.position.y = -8;
     self.add( circle );
   // TODO #2b create a second mesh from another geometry
-    var geometry = new THREE.CylinderGeometry( 1, 1, 10, 25 );
-    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    var geometry = new THREE.CylinderGeometry( 1, 1, 15, 10 );
+    var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
     var cylinder = new THREE.Mesh( geometry, material );
     self.add( cylinder );
   // TODO #2c create a third mesh from another geometry
     var geometry = new THREE.BoxGeometry( 8, 1, 5 );
-    var material = new THREE.MeshBasicMaterial( {color: 0x00ff00} );
+    var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
     var cube = new THREE.Mesh( geometry, material );
     cube.position.x = 0
-    cube.position.y = 5
+    cube.position.y = 8
     self.add( cube );
   // TODO #2d (Optional) add more meshes if you want to make a more complex object!
     //fuck no
@@ -59,6 +59,8 @@ export default function MyModel(manager) {
 MyModel.prototype = new THREE.Object3D();
 
 MyModel.prototype.animate = function () {
+    //this.incr = 2.5;
+    circle.rotation.y += Math.atan(1.25 * 2.5 * Math.sin(circle.rotation.y) / 3.6);
   // TODO #6 update transformations on each node of your model
   // appropriately to yield the desired animation(s)
   //    Examples:
