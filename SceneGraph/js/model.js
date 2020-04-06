@@ -91,5 +91,19 @@ model.prototype.pedalFwd = function () {
 model.prototype.pedalRev = function () {
   this.incr -= ONEDEGREE;
 }
+
+/* these work but im not investing any more time into this to get it to work exactly right
+model.prototype.turnRight = function () {
+  if (this.cylinder.rotation.y < MAXTURN) {
+    this.cylinder.rotation.y += ONEDEGREE;
+  }
+}
+
+model.prototype.turnLeft = function () {
+  if (this.cylinder.rotation.y > MINTURN) {
+    this.cylinder.rotation.y -= ONEDEGREE;
+  }
+}
+*/
 // TODO #7 (Optional) add additional methods for updating transformations
 // on your model for use with input controls for user interaction
