@@ -49,7 +49,7 @@
 
     var camera, scene, renderer;
     // TODO #4b rename this variable appropriately for your object
-    var mymodel;
+    var uni;
 
     var mouseX = 0, mouseY = 0;
     var windowHalfX = window.innerWidth / 2;
@@ -103,14 +103,15 @@
       scene.add(new GROUND(0, 0));
         
         
-      scene.add(new UNI(manager));
+      uni = new UNI(manager);
+      scene.add(uni);
       // TODO #5 instantiate your hierarchical model and add it to your scene
     }
 
     function animate() {
       requestAnimationFrame(animate);
       try {
-        UNI.animate();
+        uni.animate();
       } catch (e) {}
       render();
     }
@@ -136,8 +137,8 @@
     function onKeyDown(event) {
       switch (event.keyCode) {
           case 74:
-              animate();
-                UNI.pedalFwd();
+              //animate();
+                uni.pedalFwd();
           break;
         // TODO #9 (optional) interact with your model using keyboard controls
         default:
