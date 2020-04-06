@@ -57,13 +57,16 @@ export default function Bicycle(manager) {
 Bicycle.prototype = new THREE.Object3D();
 
 Bicycle.prototype.animate = function () {
-  this.incr = -WHEELRAD * this.rearWheel.incr;
-  this.frontWheel.incr = this.rearWheel.incr / Math.cos(this.steeringAssembly.rotation.y);
-  this.frontWheel.rotation.z -= this.frontWheel.incr;
-  this.rearWheel.rotation.z -= this.rearWheel.incr;
-  this.rotation.y += Math.atan(1.25 * this.frontWheel.incr * Math.sin(this.steeringAssembly.rotation.y) / 3.6);
-  this.position.x -= this.incr * Math.cos(this.rotation.y);
-  this.position.z += this.incr * Math.sin(this.rotation.y);
+   
+    this.rearWheel.rotation.z -= this.incr;
+
+  const frontWheelIncr = this.incr / Math.cos(this.steeringAssembly.rotation.y);
+  this.rotation.y += Math.atan(1.25 * frontWheelIncr * Math.sin(this.steeringAssembly.rotation.y) / 3.6);
+  this.frontWheel.rotation.z -= frontWheelIncr;
+
+  const moveIncr = -WHEELRAD * this.incr;
+  this.position.x -= moveIncr * Math.cos(this.rotation.y);
+  this.position.z += moveIncr * Math.sin(this.rotation.y);
 }
 
 Bicycle.prototype.pedalFwd = function () {

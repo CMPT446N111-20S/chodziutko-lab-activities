@@ -1,7 +1,11 @@
 import * as THREE from './vendor/build/three.module.js';
-
+const ONEDEGREE = Math.PI / 180;
+const MAXTURN = 80 * ONEDEGREE;
+const MINTURN = -MAXTURN;
+const BIKESCALE = 10;
+const WHEELRAD = 1.25 * BIKESCALE;
 // TODO #0 rename your class and module
-export default function MyModel(manager) {
+export default function model(manager) {
   // TODO #1 set the initial position/scale/orientation of your model
  const self = this;
 
@@ -23,17 +27,17 @@ export default function MyModel(manager) {
     //UNICYCLE
     var geometry = new THREE.CircleGeometry( 5,8 );
     var material = new THREE.MeshBasicMaterial( { color: 0x5e3191 } );
-    var circle = new THREE.Mesh( geometry, material );
+    this.circle = new THREE.Mesh( geometry, material );
     //self.
-    circle.position.x = 0.25;
+    this.circle.position.x = 0.25;
     //self.
-    circle.position.y = -8;
-    self.add( circle );
+    this.circle.position.y = -8;
+    self.add( this.circle );
   // TODO #2b create a second mesh from another geometry
     var geometry = new THREE.CylinderGeometry( 1, 1, 15, 10 );
     var material = new THREE.MeshBasicMaterial( {color: 0x000000} );
-    var cylinder = new THREE.Mesh( geometry, material );
-    self.add( cylinder );
+    this.cylinder = new THREE.Mesh( geometry, material );
+    self.add( this.cylinder );
   // TODO #2c create a third mesh from another geometry
     var geometry = new THREE.BoxGeometry( 8, 1, 5 );
     var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -56,11 +60,22 @@ export default function MyModel(manager) {
   // TODO #5 create and assign materials to your meshes to give your object some character!
 }
 
-MyModel.prototype = new THREE.Object3D();
+model.prototype = new THREE.Object3D();
 
-MyModel.prototype.animate = function () {
+model.prototype.animate = function () {
+    //rw
+    //this.circle.rotation.z -= this.incr;
+//fw
+  const frontWheelIncr = this.incr / Math.cos(this.cylinder.rotation.y);
+  this.rotation.y += Math.atan(1.25 * frontWheelIncr * Math.sin(this.cylinder.rotation.y) / 3.6);
+  this.circle.rotation.z -= frontWheelIncr;
+
+  const moveIncr = -WHEELRAD * this.incr;
+  this.position.x -= moveIncr * Math.cos(this.rotation.y);
+  this.position.z += moveIncr * Math.sin(this.rotation.y);
     //this.incr = 2.5;
-    circle.rotation.y += Math.atan(1.25 * 2.5 * Math.sin(circle.rotation.y) / 3.6);
+    //this.circle.rotation.z += Math.atan(1.25 * 2.5 * Math.sin(circle.rotation.y) / 3.6);
+//this.circle.rotation.y += Math.atan(1.25 * 2.5 * Math.sin(circle.rotation.y) / 3.6);
   // TODO #6 update transformations on each node of your model
   // appropriately to yield the desired animation(s)
   //    Examples:
@@ -69,6 +84,12 @@ MyModel.prototype.animate = function () {
   //      - for a Bird increment the translation on the top-level node, a vertical "bob" translation on the
   //        body node, and rotations (with limited range) on the wing nodes
 }
+model.prototype.pedalFwd = function () {
+  this.incr += ONEDEGREE;
+}
 
+model.prototype.pedalRev = function () {
+  this.incr -= ONEDEGREE;
+}
 // TODO #7 (Optional) add additional methods for updating transformations
 // on your model for use with input controls for user interaction
