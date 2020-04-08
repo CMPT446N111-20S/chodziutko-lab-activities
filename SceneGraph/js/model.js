@@ -2,8 +2,8 @@ import * as THREE from './vendor/build/three.module.js';
 const ONEDEGREE = Math.PI / 180;
 const MAXTURN = 80 * ONEDEGREE;
 const MINTURN = -MAXTURN;
-const BIKESCALE = 10;
-const WHEELRAD = 1.25 * BIKESCALE;
+const SCALE = 10;
+const WHEELRAD = 1.25 * SCALE;
 // TODO #0 rename your class and module
 export default function model(manager) {
   // TODO #1 set the initial position/scale/orientation of your model
