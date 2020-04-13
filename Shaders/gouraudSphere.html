@@ -5,7 +5,7 @@
   <title>Gouraud Per-Vertex Shading - WebGL / GLSL</title>
   <meta charset="utf-8" />
   <script id="vertex-shader" type="x-shader/x-vertex">#version 300 es
-    precision mediump float;
+     precision mediump float;
 
     in vec3 in_Position;
     in vec3 in_Normal;
@@ -18,7 +18,13 @@
     };
     uniform LightData light;
 
-    // TODO #1 declare uniform variables for surface properties
+    uniform vec3 ka;
+    uniform vec3 kd;
+    uniform vec3 ks;
+
+    uniform float phongExp;
+
+    uniform vec3 amb;
 
     uniform mat4 projMatrix;
     uniform mat4 viewMatrix;
@@ -26,18 +32,16 @@
     void main() {
       vec4 pos = viewMatrix * vec4(in_Position, 1.0);
       vec4 lightPos = viewMatrix * vec4(light.position, 1.0);
-
-      // Transform vertex normal into eye coordinates
       vec3 n = (viewMatrix * vec4(in_Normal, 0.0)).xyz;
-      vec3 l /* TODO #4 compute light direction */;
-      vec3 v /* TODO #7 compute view direction */;
-      vec3 h /* TODO #8 compute the halfway vector */;
+      vec3 l = normalize(lightPos.xyz - pos.xyz);
+      vec3 v = normalize(vec3(0.0) - pos.xyz);
+      vec3 h = normalize(v + l);
 
-      // compute the Blinn-Phong reflection model
-      vec3 ambientTerm /* TODO #2 compute the ambient product */;
-      vec3 diffuseTerm /* TODO #5 compute the diffuse product */;
-      vec3 specularTerm /* TODO #9 compute the specular product */;
-      intensity /* TODO #3/6/10 sum for total intensity (start with ambient only, then add more) */;
+        //b-p
+      vec3 ambientTerm = ka * amb;
+      vec3 diffuseTerm = kd * light.intensity * max(0.0, dot(n, l));
+      vec3 specularTerm = ks * light.intensity * pow(max(0.0, dot(n, h)), phongExp);
+      intensity = ambientTerm + diffuseTerm + specularTerm;
 
       gl_Position = projMatrix * pos;
     }

@@ -17,7 +17,8 @@
 
     void main() {
       vec4 pos = viewMatrix * vec4(in_Position, 1.0);
-      normal /* TODO #1 transform input normal into eye coordinates */;
+      normal = viewMatrix * vec4(in_Normal, 1.0);
+      /* TODO #1 transform input normal into eye coordinates */;
 
       gl_Position = projMatrix * pos;
     }
@@ -27,10 +28,16 @@
 
     /* TODO 2 declare an input variable to receive normal from vertex shader */
 
+    in vec4 normal;
+    
     out vec4 fragmentColor;
 
     void main() {
-      vec3 n; /* TODO #3 re-normalize the screen-space normal vector */
+       /* TODO #3 re-normalize the screen-space normal vector */
+      //vec3 n = viewMatrix * vec4(n, 0.0);
+      //vec4 n = normalize(vec4(normal));
+      //vec3 n = normalize(ve)
+      vec3 n = normalize(normal.xyz);
       fragmentColor = vec4( n, 1.0 );
     }
   </script>
