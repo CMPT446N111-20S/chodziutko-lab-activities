@@ -17,7 +17,7 @@
 
     void main() {
       vec4 pos = viewMatrix * vec4(in_Position, 1.0);
-      normal = viewMatrix * vec4(in_Normal, 1.0);
+      normal = viewMatrix * vec4(in_Normal, 0.0);
       /* TODO #1 transform input normal into eye coordinates */;
 
       gl_Position = projMatrix * pos;
