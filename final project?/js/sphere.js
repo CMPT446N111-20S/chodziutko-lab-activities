@@ -5,6 +5,8 @@ var numTimesToSubdivide = 1;
 var pointsArray = [];
 var normalsArray = [];
 var index = 0;
+var shader = "vertex-shader";
+var frag = "fragment-shader";
 
 var va = vec3(0.0, 0.0, -1.0);
 var vb = vec3(0.0, 0.942809, 0.333333);
@@ -21,6 +23,10 @@ var material = {
 var ambientIntensity = vec3(0.1, 0.1, 0.1);
 var light = {
   position: vec3(1.0, 1.0, 1.0),
+  intensity: vec3(1.0, 1.0, 1.0)
+};
+var light2 = {
+     position: vec3(0, 1.0, 0),
   intensity: vec3(1.0, 1.0, 1.0)
 };
 
@@ -56,17 +62,7 @@ function tetrahedron(a, b, c, d, n) {
   divideTriangle(a, c, d, n);
 }
 
-/* ASCII art rendition of how divideTriangle works
-      c
-      .
-      |\
-      | \
-   ac .--\. bc
-      |\ |\
-      | \| \
-      .--.--. b
-     a   ab
-*/
+
 function divideTriangle(a, b, c, count) {
   if (count > 0) {
     var ab = mix(a, b, 0.5);
@@ -152,7 +148,9 @@ function render() {
 
 // Load shaders and initialize attribute buffers and uniforms
 function initPipelineData() {
-  const program = initShaders(gl, "vertex-shader", "fragment-shader");
+    
+  const program = initShaders(gl, shader, frag);
+    console.log(program);
   gl.useProgram(program);
 
   // allocate new buffer, set as the active buffer, and copy normals data
@@ -182,6 +180,9 @@ function initPipelineData() {
   // light source properties
   gl.uniform3fv(gl.getUniformLocation(program, "light.position"), flatten(light.position));
   gl.uniform3fv(gl.getUniformLocation(program, "light.intensity"), flatten(light.intensity));
+    
+  gl.uniform3fv(gl.getUniformLocation(program, "light2.position"), flatten(light2.position));
+  gl.uniform3fv(gl.getUniformLocation(program, "light2.intensity"), flatten(light2.intensity));
 
   // ambien light intensity
   gl.uniform3fv(gl.getUniformLocation(program, "Ia"), flatten(ambientIntensity));
@@ -196,7 +197,23 @@ function initPipelineData() {
 // Set up the button event listeners to control the scene
 function initFormControls() {
   document.getElementById("btnCamDistUp").addEventListener("click", () => radius *= 1.25);
-  document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);
+    
+  document.getElementById("Gouraud").addEventListener("click", () => {
+    shader = "vertex-shader-2";
+    frag = "fragment-shader-2"
+      initPipelineData();
+  });
+    document.getElementById("Phong").addEventListener("click", () => {
+    shader = "vertex-shader";
+    frag = "fragment-shader"
+      initPipelineData();
+  });
+    document.getElementById("Flat").addEventListener("click", () => {
+    shader = "vertex-shader-3";
+    frag = "fragment-shader-3"
+      initPipelineData();
+  });
+ document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);
   document.getElementById("btnThetaUp").addEventListener("click", () => theta += dr);
   document.getElementById("btnThetaDn").addEventListener("click", () => theta -= dr);
   document.getElementById("btnPhiUp").addEventListener("click", () => phi += dr);
