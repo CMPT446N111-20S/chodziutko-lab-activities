@@ -1,0 +1,43 @@
+html {
+  background-color: rebeccapurple;
+  color: black;
+}
+
+canvas {
+  display: inline-block;
+  border: 2px solid #668;
+  vertical-align: middle;
+}
+
+aside {
+  display: inline-block;
+  width: 360px;
+  padding: 1em 2em;
+  vertical-align: middle;
+  text-align: center;
+}
+
+form {
+  margin-bottom: 2em;
+}
+
+h1 {
+  font-family: sans-serif;
+}
+
+
+button {
+  width: 10em;
+  border: 1px solid black;
+  background-color: darkorange;
+  color: black;
+  padding: 0.5em;
+    border-radius: 8px;
+  box-shadow: 2px 2px #001;
+  font-size: 100%;
+}
+
+button:active {
+  background-color: rebeccapurple;
+  box-shadow: 0 0 black;
+}

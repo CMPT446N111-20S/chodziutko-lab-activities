@@ -134,6 +134,21 @@ function drawScene(gl, programInfo, buffers, textures, deltaTime) {
         Be sure to specify the correct number of components.
         Also be sure to use the correct variable names from the
         buffers and the shader program's attribute locations. */
+    const numComponents = 2;
+    const type = gl.FLOAT;
+    const normalize = false;
+    const stride = 0;
+    const offset = 0;
+    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.texCoord);
+    gl.vertexAttribPointer(
+      programInfo.attribLocations.textureCoord,
+      numComponents,
+      type,
+      normalize,
+      stride,
+      offset);
+    gl.enableVertexAttribArray(
+      programInfo.attribLocations.textureCoord);
   }
   gl.useProgram(programInfo.program);
 
@@ -155,6 +170,7 @@ function drawScene(gl, programInfo, buffers, textures, deltaTime) {
 
   // Assign textures to sampler objects
   /* TODO #8 Bind texture #0 to diffuse color map and copy to sampler. */
+  gl.bindTexture(gl.TEXTURE_2D,textures[0]);
   /* TODO (Optional) Bind texture #1 to ambient map and copy to sampler. */
   /* TODO (Optional) Bind texture #2 to specular map and copy to sampler. */
 
@@ -176,11 +192,15 @@ function initBuffers(gl, numSubdivisions) {
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrays.normals), gl.STATIC_DRAW);
 
   /* TODO #9 Create and populate the texture coordinates buffer object. */
+  const texcBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, texcBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arrays.texCoords), gl.STATIC_DRAW);
 
   return {
     position: positionBuffer,
     normal: normalBuffer,
     /* TODO #10 Add the texture coordinates buffer to this object. */
+    texCoord: texcBuffer,
     size: arrays.points.length / 3
   };
 }
@@ -193,11 +213,13 @@ function buildShaderProgram(gl) {
     in vec3 in_Position;
     in vec3 in_Normal;
     /* TODO #1 Declare texture coords input from application. */
+    in vec2 texc;
 
     out vec4 normal;
     out vec3 halfway;
     out vec3 lightdir;
     /* TODO #2 Declare texture coords output to frag shader. */
+    out vec2 textureCoord;
 
     struct LightData {
       vec3 position;
@@ -226,6 +248,7 @@ function buildShaderProgram(gl) {
       halfway = normalize( v + lightdir );
 
       /* TODO #3 Copy input texture coords to output. */
+      textureCoord = texc;
 
       gl_Position = projMatrix * pos;
     }
@@ -256,6 +279,7 @@ function buildShaderProgram(gl) {
     in vec3 halfway;
     in vec3 lightdir;
     /* TODO #4 Declare texture coords input from vertex shader. */
+    in vec2 textureCoord;
 
     out vec4 fragmentColor;
 
@@ -276,6 +300,8 @@ function buildShaderProgram(gl) {
     uniform MaterialData material;
 
     /* TODO #5 Declare 2D sampler for diffuse color. */
+    uniform sampler2D uSampler;
+
     /* TODO (Optional) declare 2D sampler for ambient color */
     /* TODO (Optional) declare 2D sampler for specular color */
 
@@ -284,20 +310,12 @@ function buildShaderProgram(gl) {
       vec3 h = normalize(halfway);
       vec3 l = normalize(lightdir);
 
-      // Here be sure to use the name(s) you chose for the sampler(s)
-      vec4 diffuseTexel /* TODO #12 Look up texel using texture coords. */;
-      /* TODO (Optional) Look up ambient texel using texture coords. */;
-      /* TODO (Optional) Look up specular texel using texture coords. */;
-
-      /* TODO (Optional) Replace the material ambient color with the ambient texel.
-          Note that we only need RGB components here. */
+     
+      vec4 diffuseTexel = texture(uSampler, textureCoord);
+      
       vec3 intensity = material.ka * Ia
-        /* TODO #13 Replace material diffuse color with diffuse texel color.
-          Note that we only need RGB components here. */
-        + material.kd * light.intensity * max( 0.0, dot(n, l) )
-        /* TODO (Optional) Replace the material specular color with the specular texel.
-            Note that we only need RGB components here. */
-        /* TODO (Optional) Replace Phong exponent with specular texel alpha. */
+        + diffuseTexel.xyz * light.intensity * max( 0.0, dot(n, l) )
+      
         + material.ks * light.intensity * pow( max( 0.0, dot(n, h) ), material.phongExp );
 
       fragmentColor = vec4( intensity, 1.0 );
@@ -312,6 +330,7 @@ function buildShaderProgram(gl) {
       vertexPosition: gl.getAttribLocation(shaderProgram, "in_Position"),
       vertexNormal: gl.getAttribLocation(shaderProgram, "in_Normal"),
       /* TODO #6 Look up shader variable for texture coords attribute */
+      textureCoord: gl.getAttribLocation(shaderProgram, "texc")
     },
     uniformLocations: {
       projectionMatrix: gl.getUniformLocation(shaderProgram, "projMatrix"),
@@ -324,9 +343,8 @@ function buildShaderProgram(gl) {
       materialDiffuse: gl.getUniformLocation(shaderProgram, "material.kd"),
       materialSpecular: gl.getUniformLocation(shaderProgram, "material.ks"),
       materialShininess: gl.getUniformLocation(shaderProgram, "material.phongExp"),
-      /* TODO #7 Look up shader uniform for diffuse sampler. */
-      /* TODO (Optional) Look up shader uniform for ambient sampler. */
-      /* TODO (Optional) Look up shader uniform for specular sampler. */
+      uSampler: gl.getUniformLocation(shaderProgram, "uSampler")
+   
     },
   };
 }
@@ -381,9 +399,6 @@ function tetrahedron(n) {
     const uva = worldToSpherical(a);
     const uvb = worldToSpherical(b);
     const uvc = worldToSpherical(c);
-    /* TODO (Optional) get rid of the seam by checking if this
-        triangle crosses the s-coordinate's 1-to-0 boundary, and
-        if so then push the lower coordinates 1 unit to the right */
     texCoords.push(...uva);
     texCoords.push(...uvb);
     texCoords.push(...uvc);
@@ -391,8 +406,12 @@ function tetrahedron(n) {
 
   /* TODO #14 Implement the spherical mapping for texture coordinates. */
   function worldToSpherical(p) {
-    const s = p[0] /* TODO how do we find s from x,y,z? */ ;
-    const t = p[1] /* TODO how do we find t from x,y,z? */ ;
+    const x = p[0];
+    const y = p[1];
+    const z = p[2];
+    const a = Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2) + Math.pow(z, 2));
+    const s = (Math.atan2(y, x) + Math.PI) / (2 * Math.PI);
+    const t = Math.acos(z / a) / Math.PI;
     return [s, t];
   }
 }

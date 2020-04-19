@@ -212,8 +212,7 @@ function initFormControls() {
     shader = "vertex-shader-3";
     frag = "fragment-shader-3"
       initPipelineData();
-  });
-     document.getElementById("Lambertian").addEventListener("click", () => {
+  }); document.getElementById("Lambertian").addEventListener("click", () => {
     shader = "vertex-shader-4";
     frag = "fragment-shader-4"
       initPipelineData();
