@@ -226,7 +226,6 @@ in vec4 normal;
     void main() {
       vec4 pos = viewMatrix * vec4(in_Position, 1.0);
       normal = viewMatrix * vec4(in_Normal, 0.0);
-      /* TODO #1 transform input normal into eye coordinates */;
 
       gl_Position = projMatrix * pos;
     }
@@ -241,10 +240,40 @@ in vec4 normal;
     out vec4 fragmentColor;
 
     void main() {
-       /* TODO #3 re-normalize the screen-space normal vector */
-      //vec3 n = viewMatrix * vec4(n, 0.0);
-      //vec4 n = normalize(vec4(normal));
-      //vec3 n = normalize(ve)
+   
+      vec3 n = normalize(normal.xyz);
+      fragmentColor = vec4( n, 1.0 );
+    }
+  </script>
+     <script id="vertex-shader-5" type="x-shader/x-vertex">#version 300 es
+    precision mediump float;
+
+    in vec3 in_Position;
+    in vec3 in_Normal;
+
+    out vec4 normal;
+
+    uniform mat4 projMatrix;
+    uniform mat4 viewMatrix;
+
+    void main() {
+      vec4 pos = viewMatrix * vec4(in_Position, 1.0);
+      normal = viewMatrix * vec4(in_Normal, 0.0);
+
+      gl_Position = projMatrix * pos;
+    }
+  </script>
+  <script id="fragment-shader-5" type="x-shader/x-fragment">#version 300 es
+    precision mediump float;
+
+    /* TODO 2 declare an input variable to receive normal from vertex shader */
+
+    in vec4 normal;
+    
+    out vec4 fragmentColor;
+
+    void main() {
+   
       vec3 n = normalize(normal.xyz);
       fragmentColor = vec4( n, 1.0 );
     }
@@ -286,6 +315,9 @@ in vec4 normal;
         <p>
         <button id="Gouraud">Gouraud Shading</button>
             <button id="Lambertian">Lambertian Shading</button>
+        
+        </p>
+        <p><button id="Test">whatever this ends up being</button>
         
         </p>
     </form>
