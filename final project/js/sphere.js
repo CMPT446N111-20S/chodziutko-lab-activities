@@ -22,7 +22,7 @@ var material = {
 
 var ambientIntensity = vec3(0.1, 0.1, 0.1);
 var light = {
-  position: vec3(1.0, 1.0, 1.0),
+  position: vec3(1.0, 0, 1.0),
   intensity: vec3(1.0, 1.0, 1.0)
 };
 var light2 = {

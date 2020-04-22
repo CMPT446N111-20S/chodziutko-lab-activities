@@ -22,12 +22,12 @@ var material = {
 
 var ambientIntensity = vec3(0.1, 0.1, 0.1);
 var light = {
-  position: vec3(1.0, 1.0, 1.0),
+  position: vec3(1.0, 0, 1.0),
   intensity: vec3(1.0, 1.0, 1.0)
 };
 var light2 = {
-     position: vec3(-0.8, 0, 0),
-  intensity: vec3(0, 1.0, 0)
+     position: vec3(0, 1.0, 0),
+  intensity: vec3(1.0, 1.0, 1.0)
 };
 
 var radius = 3;
@@ -215,10 +215,6 @@ function initFormControls() {
   }); document.getElementById("Lambertian").addEventListener("click", () => {
     shader = "vertex-shader-4";
     frag = "fragment-shader-4"
-      initPipelineData();
-  }); document.getElementById("Test").addEventListener("click", () => {
-    shader = "vertex-shader-5";
-    frag = "fragment-shader-5"
       initPipelineData();
   });
  document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);
