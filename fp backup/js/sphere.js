@@ -216,6 +216,10 @@ function initFormControls() {
     shader = "vertex-shader-4";
     frag = "fragment-shader-4"
       initPipelineData();
+  }); document.getElementById("Test").addEventListener("click", () => {
+    shader = "vertex-shader-5";
+    frag = "fragment-shader-5"
+      initPipelineData();
   });
  document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);
   document.getElementById("btnThetaUp").addEventListener("click", () => theta += dr);
