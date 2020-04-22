@@ -26,7 +26,7 @@ var light = {
   intensity: vec3(1.0, 1.0, 1.0)
 };
 var light2 = {
-     position: vec3(0, 1.0, 0),
+     position: vec3(-1.0, -1.0, 1.0),
   intensity: vec3(1.0, 1.0, 1.0)
 };
 
