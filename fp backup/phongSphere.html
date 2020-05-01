@@ -246,46 +246,92 @@ in vec4 normal;
     }
   </script>
      <script id="vertex-shader-5" type="x-shader/x-vertex">#version 300 es
-  out vec4 gooch_shading(vec4 m_color, //color of the mesh
-                   float m_shine, //shininess of the surface
-                   vec3 l_direction, //light direction
-                   vec3 v_normal, //normal
-                   vec3 c_direction) //camera direction
-{
-    //diffuse
-    float kd = 1;
-    float a = 0.2;
-    float b = 0.6;
+    precision mediump float;
+    in vec3 in_Position;
+    in vec3 in_Normal;
 
-    float NL = dot(normalize(v_normal), normalize(l_direction));
+    out vec4 normal;
+    out vec3 lightdir;
+    out vec3 lightdir2;
     
-    float it = ((1 + NL) / 2);
-    vec3 color = (1-it) * (vec3(0, 0, 0.4) + a*m_color.xyz) 
-               +  it * (vec3(0.4, 0.4, 0) + b*m_color.xyz);
+    struct LightData {
+      vec3 position;
+      vec3 intensity;
+    };
     
-    //Highlights
-    vec3 R = reflect( -normalize(l_direction), 
-                      normalize(v_normal) );
-    float ER = clamp( dot( normalize(c_direction), 
-                           normalize(R)),
-                     0, 1);
+    uniform LightData light;
+    uniform LightData light2;
+    uniform mat4 projMatrix;
+    uniform mat4 viewMatrix;
     
-    vec4 spec = vec4(1) * pow(ER, m_shine);
-    
-    
-    return vec4(color+spec.xyz, m_color.a);
-}
-    
+    void main() {
+      vec4 pos = viewMatrix * vec4(in_Position, 1.0);
+      vec4 lightPos = viewMatrix * vec4(light.position, 1.0); 
+      normal = viewMatrix * vec4(in_Normal, 0.0);
+      vec3 v = normalize(-pos).xyz;
+      lightdir = normalize(lightPos - pos).xyz;
+      
+      vec4 lightPos2 = viewMatrix * vec4(light2.position, 1.0); 
+      vec3 v2 = normalize(-pos).xyz;
+      lightdir2 = normalize(lightPos2 - pos).xyz;
+
+      gl_Position = projMatrix * pos;      
+    }
   </script>
   <script id="fragment-shader-5" type="x-shader/x-fragment">#version 300 es
     precision mediump float;
 
-    in vec4 gooch_shading;
-
+    in vec4 normal;
+    in vec3 lightdir;
+    in vec3 lightdir2;
+    
     out vec4 fragmentColor;
+    struct LightData {
+      vec3 position;
+      vec3 intensity;
+    };
+    
+    uniform LightData light;
+    uniform LightData light2;
+    uniform vec3 Ia;
+    uniform vec3 ka;
+    uniform vec3 kd;
+    uniform vec3 ks;
+    uniform float phongExp;
 
+    vec4 gooch_shading(vec4 m_color,
+                      float m_shine,
+                      vec3 l_direction,
+                      vec3 v_normal,
+                      vec3 c_direction){
+                      
+      //diffuse
+      float kd = 1.0;
+      float a = 0.2;
+      float b = 0.6;
+
+      float NL = dot(normalize(v_normal), normalize(l_direction));
+
+      float it = ((1.0 + NL) / 2.0);
+      
+      vec3 color = (1.0 - it) * (vec3(0.0, 0.0, 0.4)
+                    + a * m_color.xyz) + it * (vec3(0.4, 0.4, 0.0)
+                    + b * m_color.xyz);
+
+      //Highlights
+      vec3 R = reflect( -normalize(l_direction), normalize(v_normal) );
+      float ER = clamp( dot( normalize(c_direction), normalize(R)), 0.0, 1.0);
+
+      vec4 spec = vec4(1.0) * pow(ER, m_shine);
+      return vec4(color+spec.xyz, m_color.a);
+    }
+    
+    
     void main() {
-      fragmentColor = vec4( intensity, 1.0 );
+      vec3 n = normalize(normal.xyz);
+      vec3 l = normalize(lightdir);
+
+      fragmentColor = gooch_shading(vec4(kd, 1.0), 0.1, l, n, (vec3(0.0) - vec3(-1.0)));
     }
   </script>
     
