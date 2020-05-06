@@ -4,6 +4,7 @@ var numTimesToSubdivide = 1;
 
 var pointsArray = [];
 var normalsArray = [];
+//var halfl = [];
 var index = 0;
 var shader = "vertex-shader";
 var frag = "fragment-shader";
@@ -215,6 +216,11 @@ function initFormControls() {
   }); document.getElementById("Lambertian").addEventListener("click", () => {
     shader = "vertex-shader-4";
     frag = "fragment-shader-4"
+      initPipelineData();
+  });
+    document.getElementById("Test").addEventListener("click", () => {
+    shader = "vertex-shader-5";
+    frag = "fragment-shader-5"
       initPipelineData();
   });
  document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);
