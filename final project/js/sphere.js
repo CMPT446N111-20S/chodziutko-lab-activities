@@ -193,6 +193,8 @@ function initPipelineData() {
   gl.uniform3fv(gl.getUniformLocation(program, "kd"), flatten(material.diffuse));
   gl.uniform3fv(gl.getUniformLocation(program, "ks"), flatten(material.specular));
   gl.uniform1f(gl.getUniformLocation(program, "phongExp"), material.shininess);
+    
+    
 }
 
 // Set up the button event listeners to control the scene
@@ -201,26 +203,40 @@ function initFormControls() {
     
   document.getElementById("Gouraud").addEventListener("click", () => {
     shader = "vertex-shader-2";
-    frag = "fragment-shader-2"
+    frag = "fragment-shader-2";
+      
+      document.getElementById('myelement1').innerHTML = "Named after Henri Gouraud, this shader shades per-vertex by averaging the surface normals of each polygon that meets at each vertex. This shader reacts more than others when you add more or less subdivisions.";
       initPipelineData();
   });
     document.getElementById("Phong").addEventListener("click", () => {
     shader = "vertex-shader";
-    frag = "fragment-shader"
+    frag = "fragment-shader";
+         document.getElementById('myelement1').innerHTML = "Computationally more expensive than Gouraud, this shader produces shading on a pixel level rather than by polygon, producing a smooth shading effect. It also adds a specular highlight whenever the cosine of the angle between the ray theoretically made if the light source bounced off and the viewer is equal to their dot product";
+      initPipelineData();
+  });
+     document.getElementById("Phong2").addEventListener("click", () => {
+    shader = "vertex-shader-6";
+    frag = "fragment-shader-6";
+         document.getElementById('myelement1').innerHTML = "Computationally more expensive than Gouraud, this shader produces shading on a pixel level rather than by polygon, producing a smooth shading effect. It also adds a specular highlight whenever the cosine of the angle between the ray theoretically made if the light source bounced off and the viewer is equal to their dot product";
       initPipelineData();
   });
     document.getElementById("Flat").addEventListener("click", () => {
     shader = "vertex-shader-3";
-    frag = "fragment-shader-3"
+    frag = "fragment-shader-3";
+        document.getElementById('myelement1').innerHTML ="Normal shading is not actually quite shading! This is actually a normal map, and the coloring is because each surface normal is stored as an RGB value. R is X, G is Y, and B is Z.";
       initPipelineData();
   }); document.getElementById("Lambertian").addEventListener("click", () => {
     shader = "vertex-shader-4";
-    frag = "fragment-shader-4"
+    frag = "fragment-shader-4";
+        document.getElementById('myelement1').innerHTML = "Named after Johann Heinrich Lambert, this shader produces a matte effect in shading. It takes the dot product of the surface's normal vector and a normalized light vector from the light source, then multiplied by the color of the surface and intensity of light.";
+        
       initPipelineData();
-  });
-    document.getElementById("Test").addEventListener("click", () => {
+  }); 
+    document.getElementById("CTW").addEventListener("click", () => {
     shader = "vertex-shader-5";
-    frag = "fragment-shader-5"
+    frag = "fragment-shader-5";
+        document.getElementById('myelement1').innerHTML = "Also known as Gooch shading, Cool-to-Warm shading colors points on a surface warm if they're facing the light source and a cool color if it's facing away. Fun fact: This shader was invented by a woman.";
+        
       initPipelineData();
   });
  document.getElementById("btnCamDistDn").addEventListener("click", () => radius *= 0.8);

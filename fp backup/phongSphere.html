@@ -425,6 +425,9 @@ in vec4 normal;
     Oops ... your browser doesn't support the HTML5 canvas element
   </canvas>
   <aside>
+      
+    <h1>Shader comparison</h1>
+       <p id="myelement1">Computationally more expensive than Gouraud, this shader produces shading on a pixel level rather than by polygon, producing a smooth shading effect. It also adds a specular highlight whenever the cosine of the angle between the ray theoretically made if the light source bounced off and the viewer is equal to their dot product</p>
     <h1>Controls</h1>
     <form onsubmit="return false;">
       <p>
@@ -458,8 +461,7 @@ in vec4 normal;
         
         </p>
     </form>
-    <h1>Shader comparison</h1>
-      <p id="myelement1">Computationally more expensive than Gouraud, this shader produces shading on a pixel level rather than by polygon, producing a smooth shading effect. It also adds a specular highlight whenever the cosine of the angle between the ray theoretically made if the light source bounced off and the viewer is equal to their dot product</p>
+     
   </aside>
 
   <script type="text/javascript" src="js/Common/initShaders.js"></script>
